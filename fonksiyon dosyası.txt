@@ -1,0 +1,1282 @@
+<?php ob_start();
+try{
+	$baglanti=new PDO("mysql:host=localhost;dbname=kurumsal;charset=utf8","root","");
+	$baglanti->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+ 	
+	
+}catch(PDOException $e){
+	die($e->getMessage());
+} //try-catch yapısı
+
+class yonetim{
+	
+	function sorgum($vt, $sorgu, $tercih=0){
+		
+		$al=$vt->prepare($sorgu);
+		$al->execute();
+		
+		if ($tercih==1):
+		return $al->fetch();
+		
+		elseif($tercih==2):
+		return $al;
+		
+		endif;
+		} //genel sorgum
+	
+	function siteayar($baglanti){
+		
+		$sonuc=self::sorgum($baglanti, "select * from ayarlar",1);
+		
+		if ($_POST):
+		
+$title=htmlspecialchars($_POST["title"]);
+$metatitle=htmlspecialchars($_POST["metatitle"]);
+$metadesc=htmlspecialchars($_POST["metadesc"]);
+$metakey=htmlspecialchars($_POST["metakey"]);
+$metaaut=htmlspecialchars($_POST["metaaut"]);
+$metaown=htmlspecialchars($_POST["metaown"]);
+$metacopy=htmlspecialchars($_POST["metacopy"]);
+$logoyazi=htmlspecialchars($_POST["logoyazi"]);
+$face=htmlspecialchars($_POST["face"]);
+$twit=htmlspecialchars($_POST["twit"]);
+$insta=htmlspecialchars($_POST["insta"]);
+$telno=htmlspecialchars($_POST["telno"]);
+$adres=htmlspecialchars($_POST["adres"]);
+$mailadres=htmlspecialchars($_POST["mailadres"]);
+$slogan=htmlspecialchars($_POST["slogan"]);
+$refsayfabas=htmlspecialchars($_POST["refsayfabas"]);
+$filosayfabas=htmlspecialchars($_POST["filosayfabas"]);
+$yorumsayfabas=htmlspecialchars($_POST["yorumsayfabas"]);
+$iletisimsayfabas=htmlspecialchars($_POST["iletisimsayfabas"]);
+		
+$guncelleme=$baglanti->prepare("update ayarlar set title=?,metatitle=?,metadesc=?,metakey=?,metaauthor=?,metaowner=?,metacopy=?,logoyazisi=?,face=?,twit=?,insta=?,telefonno=?,adres=?,mailadres=?,slogan=?,referansbaslik=?,filobaslik=?,yorumbaslik=?,iletisimbaslik=?");
+		
+$guncelleme->bindParam(1,$title,PDO::PARAM_STR);
+$guncelleme->bindParam(2,$metatitle,PDO::PARAM_STR);
+$guncelleme->bindParam(3,$metadesc,PDO::PARAM_STR);
+$guncelleme->bindParam(4,$metakey,PDO::PARAM_STR);
+$guncelleme->bindParam(5,$metaaut,PDO::PARAM_STR);
+$guncelleme->bindParam(6,$metaown,PDO::PARAM_STR);
+$guncelleme->bindParam(7,$metacopy,PDO::PARAM_STR);
+$guncelleme->bindParam(8,$logoyazi,PDO::PARAM_STR);
+$guncelleme->bindParam(9,$face,PDO::PARAM_STR);
+$guncelleme->bindParam(10,$twit,PDO::PARAM_STR);
+$guncelleme->bindParam(11,$insta,PDO::PARAM_STR);
+$guncelleme->bindParam(12,$telno,PDO::PARAM_STR);
+$guncelleme->bindParam(13,$adres,PDO::PARAM_STR);
+$guncelleme->bindParam(14,$mailadres,PDO::PARAM_STR);
+$guncelleme->bindParam(15,$slogan,PDO::PARAM_STR);
+$guncelleme->bindParam(16,$refsayfabas,PDO::PARAM_STR);
+$guncelleme->bindParam(17,$filosayfabas,PDO::PARAM_STR);
+$guncelleme->bindParam(18,$yorumsayfabas,PDO::PARAM_STR);
+$guncelleme->bindParam(19,$iletisimsayfabas,PDO::PARAM_STR);
+$guncelleme->execute();
+		echo '<div class="alert alert-success mt-5" role="alert">
+		<strong>Site Ayarları</strong> başarıyla güncellendi.
+		</div>';
+		
+		header("refresh:2,url=control.php");
+		
+		else:
+	
+		?>
+		
+		<form action="control.php?sayfa=siteayar" method="post">
+						<div class="row ">
+						<div class="col-lg-7 mx-auto mt-2 ">
+							<h3 class="text
+				  info">SİTE AYARLARI </h3>
+							 
+						</div>
+						<div class="col-lg-7 mx-auto mt-2 border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Title</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="title" class="form-control" value="<?php echo $sonuc["title"]; ?>"/>
+							</div>
+							
+						</div>
+							 
+						</div>
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont"	>Meta Title</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metatitle" class="form-control" value="<?php echo $sonuc["metatitle"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Sayfa Açıklama</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metadesc" class="form-control" value="<?php echo $sonuc["metadesc"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Anahtar Kelimeler</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metakey" class="form-control" value="<?php echo $sonuc["metakey"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Yapımcı</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metaaut" class="form-control" value="<?php echo $sonuc["metaauthor"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Firma</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metaown" class="form-control" value="<?php echo $sonuc["metaowner"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Copyright</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="metacopy" class="form-control" value="<?php echo $sonuc["metacopy"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Logo Yazısı</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="logoyazi" class="form-control" value="<?php echo $sonuc["logoyazisi"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Facebook</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="face" class="form-control" value="<?php echo $sonuc["face"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Twitter</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="twit" class="form-control" value="<?php echo $sonuc["twit"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Instagram</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="insta" class="form-control" value="<?php echo $sonuc["insta"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Telefon Numarası</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="telno" class="form-control" value="<?php echo $sonuc["telefonno"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Adres</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="adres" class="form-control" value="<?php echo $sonuc["adres"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Mail Adresi</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="mailadres" class="form-control" value="<?php echo $sonuc["mailadres"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Slogan</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="slogan" class="form-control" value="<?php echo $sonuc["slogan"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Referans Sayfa Başlık</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="refsayfabas" class="form-control" value="<?php echo $sonuc["referansbaslik"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Filo Sayfa Başlık</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="filosayfabas" class="form-control" value="<?php echo $sonuc["filobaslik"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">Yorum Sayfa Başlık</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="yorumsayfabas" class="form-control" value="<?php echo $sonuc["yorumbaslik"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+						<!-- ************* -->
+						<div class="col-lg-7 mx-auto  border">
+						<div class="row">
+							<div class="col-lg-3 border-right pt-3 text-left">
+							<span id="siteayarfont">İletişim Sayfa Başlık</span></div>
+							<div class="col-lg-9 p-1">
+							<input type="text" name="iletisimsayfabas" class="form-control" value="<?php echo $sonuc["iletisimbaslik"]; ?>"/></div>
+							
+						</div>
+							 
+						</div>
+						
+						<!-- ************* -->
+							<div class="col-lg-7 mx-auto mt-2 border-bottom">
+						<input type="submit" name="button" class="btn  btn-info m-1" value="GÜNCELLE" />
+							 
+						</div>
+						</div>
+						
+						</form>
+
+		<?php
+		
+		endif;
+		
+	} //site 
+	
+	function sifrele($veri){
+		return base64_encode(gzdeflate(gzcompress(serialize($veri))));
+		
+	} //şifrele
+	
+function coz($veri){
+		
+		return unserialize(gzuncompress(gzinflate(base64_decode($veri))));
+	} //çöz
+	
+	function kuladial($vt){
+		
+		$cookid=$_COOKIE["kulbilgi"];
+		$cozduk=self::coz($cookid);
+		$sorgusonuc=self::sorgum($vt, "select * from yonetim where id=$cozduk",1);
+		
+		return $sorgusonuc["kulad"];
+	} //kullanıcı adını alıyoruz
+	
+	function giriskontrol($kulad,$sifre,$vt){
+		
+		$sifrelihal=md5(sha1(md5($sifre)));
+		
+		$sor=$vt->prepare("select * from yonetim where kulad='$kulad' and sifre='$sifrelihal'");
+		
+		$sor->execute();
+		
+		if($sor->rowCount()==0):
+		
+		echo '
+		<div class="container-fluid bg-white">
+				<div class="alert alert-white border border-dark mt-5 col-md-5 mx-auto p-3 text-danger font-14 font-weight-bold">BİLGİLER HATALI! YÖNLENDİRİLİYOR</div>
+				</div>';
+	 
+	  	header("refresh:2,url=index.php");
+		
+		else:
+			
+			$gelendeger=$sor->fetch();
+			$sor=$vt->prepare("update yonetim set aktif=1 where kulad='$kulad' and sifre='$sifrelihal'");
+			$sor->execute();
+		
+		echo '
+		<div class="container-fluid bg-white">
+				<div class="alert alert-white border border-dark mt-5 col-md-5 mx-auto p-3 text-success font-14 font-weight-bold">GİRİŞ YAPILIYOR LÜTFEN BEKLEYİN</div>
+				</div>';
+		header("refresh:2,url=control.php");
+		
+		//cookie
+		$id=self::sifrele($gelendeger["id"]);
+		setcookie("kulbilgi",$id,time() + 60*60*24);
+			
+		
+		endif;
+		
+	} //giriş kontrol
+	
+	function cikis ($vt){
+		
+		$cookid=$_COOKIE["kulbilgi"];
+		$cozduk=self::coz($cookid);
+		
+		self::sorgum($vt, "update yonetim set aktif=0 where id=$cozduk",0);
+		
+		setcookie("kulbilgi",$cookid,time() - 5);
+		
+		echo '<div class="alert alert-info mt-5 col-md-5 mx-auto">Çıkış Yapılıyor</div>';
+		header("refresh:2,url=index.php");
+		
+	} //çıkış
+	
+	function kontrolet($sayfa){
+		
+		if (isset($_COOKIE["kulbilgi"])):
+		
+		/*
+		--Giriş yapan kullanıcının bilgilerini teyit etmek için db' ye bağlanabilirsin.
+		--O bilgiler ile sağlama yaparak daha fazla kontrol yapabilirsin.
+		*/
+		
+		if($sayfa=="ind") : header("location:control.php"); endif;
+		
+		else:
+		
+		if($sayfa=="cot") : header("location:index.php"); endif;
+		
+		endif;
+		
+		
+	} //cookie kontrol
+	
+//--------------------INTRO---------
+	function introayar($vt,$tercih=0){
+		if ($tercih==1):
+		return $al->fetch();
+		
+		elseif($tercih==2):
+		return $al;
+		
+		endif;
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="float-left mt-3 text-info">İNTRO RESİMLERİ</h3><a href="control.php?sayfa=introresimekle" class="btn btn-success  m-2 float-right ">+</a></div>';
+		
+		$introbilgiler=self::sorgum($vt,"select * from intro",2);
+		
+		while($sonbilgi=$introbilgiler->fetch(PDO::FETCH_ASSOC)):
+	
+		
+		echo '<div class="col-lg-4">
+		<div class="row border border-light p-1 m-1">
+		<div class="col-lg-12">
+		<img src="../'.$sonbilgi["resimyol"].'">
+		</div>
+		
+		<div class="col-lg-6 text-right">
+		<a href="control.php?sayfa=introresimguncelle&id='.$sonbilgi["id"].'" class="fa fa-edit m-2 text-success" style="font-size:25px;"></a>
+		</div>
+		
+		<div class="col-lg-6 text-left">
+		<a href="control.php?sayfa=introresimsil&id='.$sonbilgi["id"].'" class="fa fa-trash m-2 text-danger" style="font-size:25px;"></a>
+		</div>
+	</div>
+</div>';
+		
+		endwhile;
+		
+		echo '</div>';
+			
+	}// mevcut introlar getiriliyor
+	
+	function introresimekleme($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12">
+		';
+		
+		if($_POST):
+		//ilk dosyanın boş olup olmadığına bakacağız
+		//dosyanın boyutuna bakılacak
+		//dosyanın uzantısına bakılacak
+		//mutlu son 
+		
+		if($_FILES["dosya"]["name"]==""):
+		
+		echo '<div class="alert alert-danger mt-5">Dosya Yüklenmedi.Boş olamaz!</div>';
+		header("refresh:2,url=control.php?sayfa=introresimekle");
+		
+		else: //boş değilse
+			if($_FILES["dosya"]["size"]>(1024*1024*5)):
+		
+			echo '<div class="alert alert-danger mt-5">Dosya boyutu çok fazla!</div>';
+			header("refresh:2,url=control.php?sayfa=introresimekle");
+		
+		else: //boyutta bir problem yok ise
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(!in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+			echo '<div class="alert alert-danger mt-5">İzin verilen uzantı değil!</div>';
+			header("refresh:2,url=control.php?sayfa=introresimekle");
+		
+		else: //artık her şey tamam
+		
+		$dosyaminyolu='../img/carousel/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+			echo '<div class="alert alert-success mt-5">DOSYA BAŞARIYLA YÜKLENDİ</div>';
+			header("refresh:2,url=control.php?sayfa=introayar");
+		
+			//dosya yüklendikten sonra veritabanına da bu kayıt eklenmeli. 
+		$dosyaminyolu=str_replace('../','',$dosyaminyolu);
+		
+			$kayitekle=self::sorgum($vt,"insert into intro (resimyol) VALUES('$dosyaminyolu')",0);
+			endif;
+		endif;
+	endif;
+else:
+		?>
+		<div class="col-lg-4 mx-auto mt-2">
+
+			<div class="card card-bordered">
+			
+				<div class="card-body">
+				
+					<h5 class="title border-bottom">Intro resim yükleme formu</h5>
+					<form action="" method="post" enctype="multipart/form-data">
+					
+						<p class="card-text"><input type="file" name="dosya"/></p>
+						<input type="submit" name="button" value="YÜKLE" class="btn btn-primary mb-1"/>
+					</form>
+						<p class="card-text text-left text-danger border-top">
+						*İzin verilen formatlar : jpg-png <br />
+						*İzin verilen max.boyut : 5 MB
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		endif;
+		echo '</div></div></div>';
+	} //yeni intro ekleme
+	
+	function introsil($vt){
+		$introid=$_GET["id"];
+		$verial=self::sorgum($vt,"select * from intro where id=$introid",1);
+		
+			echo '<div class="row text-center">
+			<div class="col-lg-12">';
+		
+		//dosya silme işlemi
+		unlink("../".$verial["resimyol"]);
+		
+		//veritabanı veri silme
+		self::sorgum($vt,"delete from intro where id=$introid",0);
+		
+		echo '<div class="alert alert-success mt-5">SİLMELER BAŞARILI<div>';
+			echo '</div></div>';
+		
+		header("refresh:2,url=control.php?sayfa=introayar");
+	} // intro resim silme
+		
+	function introresimguncelleme($vt){
+		
+		$gelenintroid=$_GET["id"];
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12">
+		';
+		
+		if($_POST):
+		//ilk dosyanın boş olup olmadığına bakacağız
+		//dosyanın boyutuna bakılacak
+		//dosyanın uzantısına bakılacak
+		//mutlu son
+		
+		$formdangelenid=$_POST["introid"];
+		
+		if($_FILES["dosya"]["name"]==""):
+		
+		echo '<div class="alert alert-danger mt-5">Dosya Yüklenmedi.Boş olamaz!</div>';
+		header("refresh:2,url=control.php?sayfa=introayar");
+		
+		else: //boş değilse
+			if($_FILES["dosya"]["size"]>(1024*1024*5)):
+		
+			echo '<div class="alert alert-danger mt-5">Dosya boyutu çok fazla!</div>';
+			header("refresh:2,url=control.php?sayfa=introayar");
+		
+		else: //boyutta bir problem yok ise
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(!in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+			echo '<div class="alert alert-danger mt-5">İzin verilen uzantı değil!</div>';
+			header("refresh:2,url=control.php?sayfa=introayar");
+		
+		else: //artık her şey tamam
+		
+		// db' den mecvut veriyi çektik ve dosyayı sildik.
+		$resimyolunabak=self::sorgum($vt,"select * from intro where id=$gelenintroid",1);
+		
+		$dbgelenyol='../'.$resimyolunabak["resimyol"];
+		
+		unlink($dbgelenyol);
+		// db' den mecvut veriyi çektik ve dosyayı sildik.
+		$dosyaminyolu='../img/carousel/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+		$dosyaminyolu2=str_replace('../','',$dosyaminyolu);
+		
+			self::sorgum($vt,"update intro set resimyol='$dosyaminyolu' where id=$gelenintroid",0);
+		
+			echo '<div class="alert alert-success mt-5">DOSYA BAŞARIYLA GÜNCELLENDİ</div>';
+			header("refresh:2,url=control.php?sayfa=introayar");
+		
+			endif;
+		endif;
+	endif;
+else:
+?>
+		<div class="col-lg-4 mx-auto mt-2">
+
+			<div class="card card-bordered">
+			
+				<div class="card-body">
+				
+					<h5 class="title border-bottom">Intro resim güncelleme  formu</h5>
+					<form action="" method="post" enctype="multipart/form-data">
+					
+						<p class="card-text"><input type="file" name="dosya"/></p>
+						<p class="card-text"><input type="hidden" name="introid" value="<?php echo $gelenintroid; ?>"/></p>
+						<input type="submit" name="button" value="YÜKLE" class="btn btn-primary mb-1"/> 
+					</form>
+						<p class="card-text text-left text-danger border-top">
+						*İzin verilen formatlar : jpg-png <br />
+						*İzin verilen max.boyut : 5 MB
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		endif;
+		echo '</div></div></div>';
+	} //intro resim güncelleme
+//--------------------ARAÇ FİLOSU---------
+		function aracfilo($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="float-left mt-3 text-info">ARAÇ FİLO RESİMLERİ</h3><a href="control.php?sayfa=aracfiloekle" class="btn btn-success  m-2 float-right ">+</a></div>';
+		
+		$introbilgiler=self::sorgum($vt,"select * from filomuz",2);
+		
+		while($sonbilgi=$introbilgiler->fetch(PDO::FETCH_ASSOC)):
+	
+		
+		echo '<div class="col-lg-4">
+		<div class="row border border-light p-1 m-1">
+		<div class="col-lg-12">
+		<img src="../'.$sonbilgi["resimyol"].'">
+		</div>
+		
+		<div class="col-lg-6 text-right">
+		<a href="control.php?sayfa=aracfiloguncelle&id='.$sonbilgi["id"].'" class="fa fa-edit m-2 text-success" style="font-size:25px;"></a>
+		</div>
+		
+		<div class="col-lg-6 text-left">
+		<a href="control.php?sayfa=aracfilosil&id='.$sonbilgi["id"].'" class="fa fa-trash m-2 text-danger" style="font-size:25px;"></a>
+		</div>
+	</div>
+</div>';
+		
+		endwhile;
+		
+		echo '</div>';
+			
+	}// mevcut filo araçlar getiriliyor
+	
+	function aracfiloekleme($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12">
+		';
+		
+		if($_POST):
+		//ilk dosyanın boş olup olmadığına bakacağız
+		//dosyanın boyutuna bakılacak
+		//dosyanın uzantısına bakılacak
+		//mutlu son 
+		
+		if($_FILES["dosya"]["name"]==""):
+		
+		echo '<div class="alert alert-danger mt-5">Dosya Yüklenmedi.Boş olamaz!</div>';
+		header("refresh:2,url=control.php?sayfa=aracfiloekle");
+		
+		else: //boş değilse
+			if($_FILES["dosya"]["size"]>(1024*1024*5)):
+		
+			echo '<div class="alert alert-danger mt-5">Dosya boyutu çok fazla!</div>';
+			header("refresh:2,url=control.php?sayfa=aracfiloekle");
+		
+		else: //boyutta bir problem yok ise
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(!in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+			echo '<div class="alert alert-danger mt-5">İzin verilen uzantı değil!</div>';
+			header("refresh:2,url=control.php?sayfa=aracfiloekle");
+		
+		else: //artık her şey tamam
+		
+		$dosyaminyolu='../img/filo/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+			echo '<div class="alert alert-success mt-5">DOSYA BAŞARIYLA YÜKLENDİ</div>';
+			header("refresh:2,url=control.php?sayfa=aracfilo");
+		
+			//dosya yüklendikten sonra veritabanına da bu kayıt eklenmeli. 
+		$dosyaminyolu2=str_replace('../','',$dosyaminyolu);
+		
+			self::sorgum($vt,"insert into filomuz (resimyol) VALUES('$dosyaminyolu2')",0);
+			endif;
+		endif;
+	endif;
+else:
+		?>
+		<div class="col-lg-4 mx-auto mt-2">
+
+			<div class="card card-bordered">
+			
+				<div class="card-body">
+				
+					<h5 class="title border-bottom">Araç Filo Resim Yükleme Formu</h5>
+					<form action="" method="post" enctype="multipart/form-data">
+					
+						<p class="card-text"><input type="file" name="dosya"/></p>
+						<input type="submit" name="button" value="YÜKLE" class="btn btn-primary mb-1"/>
+					</form>
+						<p class="card-text text-left text-danger border-top">
+						*İzin verilen formatlar : jpg-png <br />
+						*İzin verilen max.boyut : 5 MB
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		endif;
+		echo '</div></div></div>';
+	} //yeni araç ekleme
+	
+	function aracfilosil($vt){
+		$introid=$_GET["id"];
+		$verial=self::sorgum($vt,"select * from filomuz where id=$introid",1);
+		
+			echo '<div class="row text-center">
+			<div class="col-lg-12">';
+		
+		//dosya silme işlemi
+		unlink("../".$verial["resimyol"]);
+		
+		//veritabanı veri silme
+		self::sorgum($vt,"delete from filomuz where id=$introid",0);
+		
+		echo '<div class="alert alert-success mt-5">SİLMELER BAŞARILI<div>';
+			echo '</div></div>';
+		
+		header("refresh:2,url=control.php?sayfa=aracfilo");
+	} // araç resim silme
+		
+	function aracfiloguncelleme($vt){
+		
+		$gelenintroid=$_GET["id"];
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12">
+		';
+		
+		if($_POST):
+		//ilk dosyanın boş olup olmadığına bakacağız
+		//dosyanın boyutuna bakılacak
+		//dosyanın uzantısına bakılacak
+		//mutlu son
+		
+		$formdangelenid=$_POST["introid"];
+		
+		if($_FILES["dosya"]["name"]==""):
+		
+		echo '<div class="alert alert-danger mt-5">Dosya Yüklenmedi.Boş olamaz!</div>';
+		header("refresh:2,url=control.php?sayfa=aracfilo");
+		
+		else: //boş değilse
+			if($_FILES["dosya"]["size"]>(1024*1024*5)):
+		
+			echo '<div class="alert alert-danger mt-5">Dosya boyutu çok fazla!</div>';
+			header("refresh:2,url=control.php?sayfa=aracfilo");
+		
+		else: //boyutta bir problem yok ise
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(!in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+			echo '<div class="alert alert-danger mt-5">İzin verilen uzantı değil!</div>';
+			header("refresh:2,url=control.php?sayfa=aracfilo");
+		
+		else: //artık her şey tamam
+		
+		// db' den mecvut veriyi çektik ve dosyayı sildik.
+		$resimyolunabak=self::sorgum($vt,"select * from filomuz where id=$gelenintroid",1);
+		
+		$dbgelenyol='../'.$resimyolunabak["resimyol"];
+		
+		unlink($dbgelenyol);
+		// db' den mecvut veriyi çektik ve dosyayı sildik.
+		$dosyaminyolu='../img/filo/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+		$dosyaminyolu2=str_replace('../','',$dosyaminyolu);
+		
+			self::sorgum($vt,"update filomuz set resimyol='$dosyaminyolu2' where id=$gelenintroid",0);
+		
+			echo '<div class="alert alert-success mt-5">DOSYA BAŞARIYLA GÜNCELLENDİ</div>';
+			header("refresh:2,url=control.php?sayfa=aracfilo");
+		
+			endif;
+		endif;
+	endif;
+else:
+?>
+		<div class="col-lg-4 mx-auto mt-2">
+
+			<div class="card card-bordered">
+			
+				<div class="card-body">
+				
+					<h5 class="title border-bottom">Araç Filo resim güncelleme  formu</h5>
+					<form action="" method="post" enctype="multipart/form-data">
+					
+						<p class="card-text"><input type="file" name="dosya"/></p>
+						<p class="card-text"><input type="hidden" name="introid" value="<?php echo $gelenintroid; ?>"/></p>
+						<input type="submit" name="button" value="YÜKLE" class="btn btn-primary mb-1"/> 
+					</form>
+						<p class="card-text text-left text-danger border-top">
+						*İzin verilen formatlar : jpg-png <br />
+						*İzin verilen max.boyut : 5 MB
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		endif;
+		echo '</div></div></div>';
+	} //araç güncelleme
+	//--------------  HAKKIMIZDA------------
+	
+		function hakkimizda($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="mt-3 text-info">HAKKIMIZDA AYARLARI</h3></div>';
+			
+			if (!$_POST):
+		
+		$sonbilgi=self::sorgum($vt,"select * from hakkimizda",1);
+		
+		echo '
+		<div class="row card-bordered p-1 m-1">
+		
+		<div class="col-lg-3 border-bottom bg-light"  id="hakkimizdayazilar">
+		Resim
+		</div>
+		
+		<div class="col-lg-9 border-bottom">
+		<img src="../'.$sonbilgi["resim"].'"><br>
+		<form action="" method="post" enctype="multipart/form-data">
+		<input type="file" name="dosya">
+		</div>
+		
+		<div class="col-lg-3 border-bottom bg-light pt-3" id="hakkimizdayazilarn">
+		Başlık
+		</div>
+		
+		<div class="col-lg-9 border-bottom">
+		<input type="text" name="baslik" class="form-control m-2" value="'.$sonbilgi["baslik"].'">
+		
+		</div>
+		
+		<div class="col-lg-3 bg-light" id="hakkimizdayazilar">
+		İçerik
+		</div>
+		
+		<div class="col-lg-9">
+		<textarea name="icerik" class="form-control m-2" rows="8">'.$sonbilgi["icerik"].'</textarea>
+		
+		</div>
+		
+		<div class="col-lg-12 border-top">
+		<input type="submit" name="guncel" value="GÜNCELLE" class="btn bnt-primary m-2">
+		</form>
+		</div>
+		
+	</div>';
+			else:
+			
+			$baslik=htmlspecialchars($_POST["baslik"]);
+			$icerik=htmlspecialchars($_POST["icerik"]);
+			// form basıldıysa 
+			
+			if(@$_FILES["dosya"]["name"]!=""):
+		
+			
+			if($_FILES["dosya"]["size"]<(1024*1024*5)):
+		
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+		
+		$dosyaminyolu='../img/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+		$veritabaniicin=str_replace('../','',$dosyaminyolu);
+			
+			endif;
+		endif;
+	endif;
+			if(@$_FILES["dosya"]["name"]!=""):
+				self::sorgum($vt,"update hakkimizda set baslik='$baslik', icerik='$icerik', resim='$veritabaniicin'",0);
+			echo '
+			<div class="col-lg-6 mx-auto">
+			<div class="alert alert-success mt-5">GÜNCELLEME BAŞARILI<div>
+			<div>';
+		header("refresh:2,url=control.php?sayfa=hakkimiz");
+			else:
+				self::sorgum($vt,"update hakkimizda set baslik='$baslik', icerik='$icerik'",0);
+			
+			echo '<div class="col-lg-6 mx-auto">
+			<div class="alert alert-success mt-5">GÜNCELLEME BAŞARILI<div>
+			<div>';
+		header("refresh:2,url=control.php?sayfa=hakkimiz");
+			endif;
+			
+		echo '</div';
+			
+endif; // en ana if
+			
+	}// hakkımızda ayar bölümü
+	
+	//--------------  HİZMETLERİMİZ------------
+		function hizmetlerhepsi($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="float-left mt-3 text-info">HİZMETLERİMİZ</h3>
+		<a href="control.php?sayfa=hizmetekle" class="btn btn-success  m-2 float-right ">+</a></div>';
+		
+		$introbilgiler=self::sorgum($vt,"select * from hizmetler",2);
+		
+		while($sonbilgi=$introbilgiler->fetch(PDO::FETCH_ASSOC)):
+	
+		
+		echo '<div class="col-lg-6">
+		<div class="row card-bordered p-1 m-1 bg-light">
+		<div class="col-lg-11 pt-3">
+		'.$sonbilgi["baslik"].'
+		</div>
+		<div class="col-lg-1 text-right">
+		<a href="control.php?sayfa=hizmetguncelle&id='.$sonbilgi["id"].'" class="fa fa-edit text-success" style="font-size:25px;"></a>
+		
+		<a href="control.php?sayfa=hizmetsil&id='.$sonbilgi["id"].'" class="fa fa-trash text-danger" style="font-size:25px;"></a>
+		
+		</div>
+		<div class="col-lg-12 border-top">
+		'.$sonbilgi["icerik"].'
+		</div>
+		
+		
+		</div>
+	</div>
+</div>';
+		
+		endwhile;
+		
+		echo '</div>';
+			
+	}//hizmetler geliyor
+	
+		function hizmetekleme($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="mt-3 text-info">HİZMET EKLE</h3>
+		</div>';
+			
+			if(!$_POST):
+			
+		
+		
+			
+		
+			echo '<div class="col-lg-6 mx-auto">
+		<div class="row card-bordered p-1 m-1 bg-light">
+		
+		
+		<div class="col-lg-2 pt-3">
+		Başlık
+		</div>
+		
+		<div class="col-lg-10 p-2">
+		<form action="" method="post">
+		<input type="text" name="baslik" class="form-control">
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		İçerik
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		<textarea name="icerik" rows="5" class="form-control"></textarea>
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		<input type="submit" name="buton" value="HİZMET EKLE" class="btn btn-primary">
+		
+		</form>
+		</div>
+		
+		
+		</div>
+	</div>
+</div>';
+			else:
+			$baslik=htmlspecialchars($_POST["baslik"]);
+			$icerik=htmlspecialchars($_POST["icerik"]);
+				
+			if($baslik=="" && $icerik==""):
+			echo '<div class="col-lg-6 mx-auto">
+			<div class="alert alert-danger mt-5">VERİLER BOŞ OLAMAZ<div>
+			<div>';
+			header("refresh:1,url=control.php?sayfa=hizmetler");
+			
+			else:
+				self::sorgum($vt,"insert into hizmetler (baslik,icerik) VALUES('$baslik','$icerik')",0);
+			
+			echo '<div class="col-lg-6 mx-auto">
+			<div class="alert alert-success mt-5">EKLEME BAŞARILI<div>
+			<div>';
+			
+			header("refresh:2,url=control.php?sayfa=hizmetler");
+			
+			endif;
+			
+			endif;
+
+		
+		echo '</div>';
+			
+	} //Hizmet ekle
+	
+		function hizmetguncelleme($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="mt-3 text-info">HİZMET GÜNCELLE</h3>
+		</div>';
+			
+			/*
+			ilk gelen id alınacak
+			id ile veritabanına çıkılıp verinin bilgileri gelecek
+			inputlara o verilere yazılacak
+			hidden id ile id post için taşınacak
+			*/
+			$kayitid=$_GET["id"];
+			$kayitbilgial=self::sorgum($vt,"select * from hizmetler where id=$kayitid",1);
+if(!$_POST):
+			
+		echo '<div class="col-lg-6 mx-auto">
+		<div class="row card-bordered p-1 m-1 bg-light">
+		
+		<div class="col-lg-2 pt-3">
+		Başlık
+		</div>
+		
+		<div class="col-lg-10 p-2">
+		<form action="" method="post">
+		<input type="text" name="baslik" class="form-control" value="'.$kayitbilgial["baslik"].'">
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		İçerik
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		<textarea name="icerik" rows="5" class="form-control">'.$kayitbilgial["icerik"].'</textarea>
+		</div>
+		
+		<div class="col-lg-12 border-top p-2">
+		<input type="hidden" name="kayitidsi" value="'.$kayitid.'">
+		<input type="submit" name="buton" value="HİZMET GÜNCELLE" class="btn btn-primary">
+		
+		</form>
+		</div>
+		</div>
+	</div>
+</div>';
+			else:
+			$baslik=htmlspecialchars($_POST["baslik"]);
+			$icerik=htmlspecialchars($_POST["icerik"]);
+			
+			$kayitidsi=htmlspecialchars($_POST["kayitidsi"]);
+				
+			if($baslik=="" && $icerik==""):
+			echo '<div class="col-lg-6 mx-auto">
+			<div class="alert alert-danger mt-5">VERİLER BOŞ OLAMAZ<div>
+			<div>';
+			header("refresh:2,url=control.php?sayfa=hizmetler");
+			
+			else:
+				self::sorgum($vt,"update hizmetler set baslik='$baslik',icerik='$icerik' where id=kayitidsi",0);
+			
+			echo '<div class="col-lg-6 mx-auto">
+			<div class="alert alert-success mt-5">GÜNCELLEME BAŞARILI<div>
+			<div>';
+			
+			header("refresh:2,url=control.php?sayfa=hizmetler");
+			
+			endif;
+		endif;
+echo '</div>';
+			
+	} //Hizmet güncelle
+	
+	function hizmetsil($vt){
+		$kayitid=$_GET["id"];
+	
+		echo '<div class="row text-center">
+			<div class="col-lg-12">';
+
+		self::sorgum($vt,"delete from hizmetler where id=$kayitid",0);
+		
+		echo '<div class="alert alert-success mt-5">SİLME BAŞARILI<div>';
+			echo '</div></div>';
+		
+		header("refresh:2,url=control.php?sayfa=hizmetler");
+	} //hizmet sil
+	
+	//--------------  REFERANSLAR------------
+	
+			function referanslarhepsi($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12 border-bottom"><h3 class="float-left mt-3 text-info">REFERANSLAR</h3><a href="control.php?sayfa=refekle" class="btn btn-success  m-2 float-right ">+</a></div>';
+		
+		$introbilgiler=self::sorgum($vt,"select * from referanslar",2);
+		
+		while($sonbilgi=$introbilgiler->fetch(PDO::FETCH_ASSOC)):
+	
+		
+		echo '<div class="col-lg-4">
+		<div class="row card-bordered p-1 m-1">
+		<div class="col-lg-12">
+		<img src="../'.$sonbilgi["resimyol"].'">
+		
+		<a href="control.php?sayfa=refsil&id='.$sonbilgi["id"].'" class="fa fa-trash m-2 text-danger" style="font-size:25px;"></a>
+		</div>
+	</div>
+</div>';
+		
+		endwhile;
+		
+		echo '</div>';
+			
+	}// mevcut referanslar getiriliyor	
+	
+		function refekleme($vt){
+		
+		echo '<div class="row text-center">
+		<div class="col-lg-12">';
+		
+		if($_POST):
+		
+		
+		if($_FILES["dosya"]["name"]==""):
+		
+		echo '<div class="alert alert-danger mt-5">Dosya Yüklenmedi.Boş olamaz!</div>';
+		header("refresh:2,url=control.php?sayfa=ref");
+		
+		else: //boş değilse
+			if($_FILES["dosya"]["size"]>(1024*1024*5)):
+		
+			echo '<div class="alert alert-danger mt-5">Dosya boyutu çok fazla!</div>';
+			header("refresh:2,url=control.php?sayfa=ref");
+		
+		else: //boyutta bir problem yok ise
+			$izinverilen=array("image/png","img/jpeg");
+		
+			if(!in_array($_FILES["dosya"]["type"],$izinverilen)):
+		
+			echo '<div class="alert alert-danger mt-5">İzin verilen uzantı değil!</div>';
+			header("refresh:2,url=control.php?sayfa=ref");
+		
+		else: //artık her şey tamam
+		
+		$dosyaminyolu='../img/referans/'.$_FILES["dosya"]["name"];
+		
+			move_uploaded_file($_FILES["dosya"]["tmp_name"],$dosyaminyolu);
+		
+			echo '<div class="alert alert-success mt-5">DOSYA BAŞARIYLA YÜKLENDİ</div>';
+			header("refresh:2,url=control.php?sayfa=ref");
+		
+			//dosya yüklendikten sonra veritabanına da bu kayıt eklenmeli. 
+		$dosyaminyolu2=str_replace('../','',$dosyaminyolu);
+		
+			self::sorgum($vt,"insert into referanslar (resimyol) VALUES('$dosyaminyolu2')",0);
+			endif;
+		endif;
+	endif;
+else:
+		?>
+		
+		<div class="col-lg-4 mx-auto mt-2">
+
+			<div class="card card-bordered">
+			
+				<div class="card-body">
+				
+					<h5 class="title border-bottom">Referans Ekleme Formu</h5>
+					<form action="" method="post" enctype="multipart/form-data">
+					
+						<p class="card-text"><input type="file" name="dosya"/></p>
+						<input type="submit" name="button" value="YÜKLE" class="btn btn-primary mb-1"/>
+					</form>
+						<p class="card-text text-left text-danger border-top">
+						*İzin verilen formatlar : jpg-png <br />
+						*İzin verilen max.boyut : 5 MB
+						</p>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		endif;
+		echo '</div></div></div>';
+	} //yeni referans ekleme
+	
+		function refsil($vt){
+		$refid=$_GET["id"];
+		$verial=self::sorgum($vt,"select * from referanslar where id=$refid",1);
+		
+			echo '<div class="row text-center">
+			<div class="col-lg-12">';
+		
+		//dosya silme işlemi
+		unlink("../".$verial["resimyol"]);
+		
+		//veritabanı veri silme
+		self::sorgum($vt,"delete from referanslar where id=$refid",0);
+		
+		echo '<div class="alert alert-success mt-5">SİLME BAŞARILI<div>';
+			echo '</div></div>';
+		
+		header("refresh:2,url=control.php?sayfa=ref");
+	} // referans silme
+
+}
+
+
+
+?>
